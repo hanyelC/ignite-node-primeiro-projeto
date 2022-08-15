@@ -1,7 +1,7 @@
 const { randomUUID } = require('crypto')
 const express = require('express')
 
-const customers = []
+const users = []
 
 const app = express()
 
@@ -18,16 +18,20 @@ app.use(express.json())
 app.post('/account', (req, res) => {
   const { cpf, name } = req.body
 
-  const id = randomUUID()
+  const userAlreadyExists = users.some(user => user.cpf === cpf)
 
-  customers.push({
+  if (userAlreadyExists) {
+    return res.status(400).json({ message: 'User already exists!'})
+  }
+
+  users.push({
     cpf,
     name,
-    id,
+    id: randomUUID(),
     statement: []
   })
-  
-  res.status(201).json(id)
+
+  res.status(201).send()
 })
 
 app.listen(3333, console.log('listening on port 3333'))
