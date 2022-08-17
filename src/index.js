@@ -119,4 +119,19 @@ app.get('/statement/date', verifyIfExistsAccountCPF, (req, res) => {
   return res.json(statement)
 })
 
+app.put('/account', verifyIfExistsAccountCPF, (req, res) => {
+  const { name } = req.body
+  const { user } = req
+
+  user.name = name
+
+  return res.status(201).send()
+})
+
+app.get('/account', verifyIfExistsAccountCPF, (req, res) => {
+  const { user } = req
+
+  return res.json(user)
+})
+
 app.listen(3333, console.log('listening on port 3333'))
