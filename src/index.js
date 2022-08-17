@@ -104,5 +104,19 @@ app.post('/withdraw', verifyIfExistsAccountCPF, (req, res) => {
   return res.status(201).send()
 })
 
+app.get('/statement/date', verifyIfExistsAccountCPF, (req, res) => {
+  const { date } = req.query
+  const { user } = req
+
+  const dateFormat = new Date(date + " 00:00")
+
+  const statement = user.statement.filter(
+    (statement) =>
+      statement.created_at.toDateString() ===
+      new Date(dateFormat).toDateString()
+  )
+
+  return res.json(statement)
+})
 
 app.listen(3333, console.log('listening on port 3333'))
